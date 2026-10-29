@@ -27,22 +27,41 @@ export class OfflineGameService {
     };
 
     // Can be used to check if the selected hand wins/loses
-    // TODO : complete structure
     #resultLookup = {
         scissors: {
             scissors: 0,
-            rock: 1,
-            paper: -1,
+            rock: -1,
+            paper: 1,
+            lizard: 1,
+            spock: -1,
         },
         rock: {
-            scissors: 0,
+            scissors: 1,
             rock: 0,
-            paper: 0,
+            paper: -1,
+            lizard: 1,
+            spock: -1,
         },
         paper: {
-            scissors: 0,
-            rock: 0,
+            scissors: -1,
+            rock: 1,
             paper: 0,
+            lizard: -1,
+            spock: 1,
+        },
+        lizard: {
+            scissors: -1,
+            rock: -1,
+            paper: 1,
+            lizard: 0,
+            spock: 1,
+        },
+        spock: {
+            scissors: 1,
+            rock: 1,
+            paper: -1,
+            lizard: -1,
+            spock: 0,
         },
     };
 
