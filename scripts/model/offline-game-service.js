@@ -84,15 +84,28 @@ export class OfflineGameService {
         return ranking;
     }
 
-    // TODO
     async evaluate(playerName, playerHand) {
-        const systemHand = this.possibleHands[0];
-        const gameEval = 0;
+        // computer picks a random hand
+        const randomIndex = Math.floor(Math.random() * this.possibleHands.length);
+        const systemHand = this.possibleHands[randomIndex];
 
-        console.log(playerName, playerHand, systemHand, gameEval);
+        // 1 = player wins, 0 = draw, -1 = player loses
+        const gameEval = this.#resultLookup[playerHand][systemHand];
+
+        // create player on first game
+        if (!this.#playerState[playerName]) {
+            this.#playerState[playerName] = { user: playerName, win: 0, lost: 0 };
+        }
+
+        // update statistics (draws are not counted)
+        if (gameEval === 1) {
+            this.#playerState[playerName].win++;
+        } else if (gameEval === -1) {
+            this.#playerState[playerName].lost++;
+        }
 
         await Utils.wait(OfflineGameService.DELAY_MS); // emulate async
 
-        return {gameEval, playerHand, systemHand};
+        return { gameEval, playerHand, systemHand };
     }
 }
