@@ -10,3 +10,99 @@ h1 {
 .error {
     color: red;
 }
+
+/* Spielseite */
+#game-page {
+    max-width: 640px;
+}
+
+.hand-buttons {
+    display: flex;
+}
+
+.hand-button {
+    flex: 1;
+    padding: 1rem 0.5rem;
+    border: 1px solid #000;
+    background-color: #fff;
+    color: #000;
+    font-size: 1rem;
+    cursor: pointer;
+}
+
+/* benachbarte Ränder zusammenlegen */
+.hand-button + .hand-button {
+    margin-left: -1px;
+}
+
+.hand-button:disabled {
+    cursor: default;
+}
+
+.hand-button:hover:not(:disabled) {
+    background-color: #f0f0f0;
+}
+
+.hand-button.selected {
+    position: relative; /* blauer Rand liegt über den Nachbar-Rändern */
+    border-color: #4a90d9;
+    background-color: #e0ffff;
+}
+
+.win {
+    color: green;
+}
+
+.lose {
+    color: red;
+}
+
+.hand-button.win {
+    color: green;
+}
+
+.hand-button.lose {
+    color: red;
+}
+
+#countdown {
+    min-height: 1.2em; /* Platz reservieren, damit nichts springt */
+    margin: 1.5rem 0;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+#system-hand {
+    width: 240px;
+    min-height: 1.5em; /* Kasten bleibt gleich hoch, auch wenn er leer ist */
+    margin: 0 auto;
+    padding: 1rem;
+    border: 1px solid #000;
+    font-size: 1.2rem;
+    text-align: center;
+}
+
+#back-button {
+    margin-top: 2rem;
+    padding: 0.75rem 1.25rem;
+    font-size: 1rem;
+}
+
+#game-page hr {
+    margin: 1.5rem 0;
+}
+
+#history-table {
+    width: 100%;
+    border-collapse: collapse;
+    text-align: left;
+}
+
+#history-table caption {
+    padding: 0.5rem;
+    font-size: 1.2rem;
+}
+
+#history-table tbody tr:nth-child(even) {
+    background-color: #e0ffff;
+}

@@ -17,9 +17,7 @@ const nameInput = document.querySelector('#name');
 const gamePage = document.querySelector('#game-page');
 const playerNameElement = document.querySelector('#player-name');
 const handButtons = document.querySelectorAll('[data-hand]');
-const playerHandElement = document.querySelector('#player-hand');
 const systemHandElement = document.querySelector('#system-hand');
-const resultElement = document.querySelector('#result');
 const countdownElement = document.querySelector('#countdown');
 const gameErrorElement = document.querySelector('#game-error');
 const historyElement = document.querySelector('#history');
@@ -71,19 +69,32 @@ startForm.addEventListener('submit', (event) => {
         return; // nur Leerzeichen eingegeben
     }
 
-    playerNameElement.textContent = `${playerName}! Wähle deine Hand!`;
+    playerNameElement.textContent = playerName;
     historyElement.replaceChildren(); // History für das neue Spiel leeren
 
     startPage.hidden = true;
     gamePage.hidden = false;
 });
 
-// Ergebnis (gameEval) in Text umwandeln
-const resultTexts = {
-    1: 'Du',
-    0: 'Unentschieden',
-    '-1': 'Computer',
+// Ergebnis (gameEval) als Symbol und CSS-Klasse
+const resultSymbols = {
+    1: '✓',
+    0: '=',
+    '-1': '✗',
 };
+const resultClasses = {
+    1: 'win',
+    0: 'draw',
+    '-1': 'lose',
+};
+
+// Hand-Buttons in den Ausgangszustand zurücksetzen (keine Markierung)
+function resetHandButtons() {
+    handButtons.forEach((button) => {
+        button.textContent = button.dataset.hand;
+        button.classList.remove('selected', 'win', 'draw', 'lose');
+    });
+}
 
 // Alle Hand-Buttons sperren bzw. freigeben
 function setHandButtonsDisabled(disabled) {
@@ -112,18 +123,25 @@ handButtons.forEach((button) => {
         try {
             const { gameEval, playerHand, systemHand } = await gameService.evaluate(playerName, hand);
 
-            // Ergebnis anzeigen
-            playerHandElement.textContent = playerHand;
+            // gewählte Hand markieren und Hand des Computers anzeigen
+            resetHandButtons();
+            button.classList.add('selected', resultClasses[gameEval]);
+            button.textContent = `${resultSymbols[gameEval]} ${playerHand}`;
             systemHandElement.textContent = systemHand;
-            resultElement.textContent = resultTexts[gameEval];
 
             // History-Eintrag (neuster Eintrag zuoberst)
             const row = historyElement.insertRow(0);
-            row.insertCell().textContent = resultTexts[gameEval];
+            const resultCell = row.insertCell();
+            resultCell.textContent = resultSymbols[gameEval];
+            resultCell.className = resultClasses[gameEval];
             row.insertCell().textContent = playerHand;
             row.insertCell().textContent = systemHand;
 
             await waitWithCountdown(); // Ergebnis bleibt währenddessen sichtbar
+
+            // Runde vorbei: Auswahl zurücksetzen (History bleibt)
+            resetHandButtons();
+            systemHandElement.textContent = '';
         } catch {
             gameErrorElement.textContent = 'Das Spiel konnte nicht ausgewertet werden. Bitte versuche es nochmals.';
         } finally {
@@ -135,9 +153,8 @@ handButtons.forEach((button) => {
 // Zurück zur Startseite
 backButton.addEventListener('click', () => {
     // Ergebnisanzeige leeren
-    playerHandElement.textContent = '';
+    resetHandButtons();
     systemHandElement.textContent = '';
-    resultElement.textContent = '';
     gameErrorElement.textContent = '';
 
     nameInput.value = ''; // Namensfeld leeren
