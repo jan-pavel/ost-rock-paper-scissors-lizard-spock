@@ -1,5 +1,7 @@
 import { gameService } from './model/game-service.js';
 
+let playerName = ''; // Name des aktuellen Spielers
+
 // Startseite
 const startPage = document.querySelector('#start-page');
 const rankingElement = document.querySelector('#ranking');
@@ -35,3 +37,18 @@ async function renderRanking() {
 }
 
 renderRanking();
+
+// Spiel starten
+startForm.addEventListener('submit', (event) => {
+    event.preventDefault(); // verhindert das Neuladen der Seite
+
+    playerName = nameInput.value.trim();
+    if (!playerName) {
+        return; // nur Leerzeichen eingegeben
+    }
+
+    playerNameElement.textContent = `${playerName}! Wähle deine Hand!`;
+
+    startPage.hidden = true;
+    gamePage.hidden = false;
+});
