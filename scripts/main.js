@@ -52,6 +52,7 @@ startForm.addEventListener('submit', (event) => {
     }
 
     playerNameElement.textContent = `${playerName}! Wähle deine Hand!`;
+    historyElement.replaceChildren(); // History für das neue Spiel leeren
 
     startPage.hidden = true;
     gamePage.hidden = false;
@@ -103,4 +104,18 @@ handButtons.forEach((button) => {
         await waitWithCountdown(); // Ergebnis bleibt währenddessen sichtbar
         setHandButtonsDisabled(false);
     });
+});
+
+// Zurück zur Startseite
+backButton.addEventListener('click', () => {
+    // Ergebnisanzeige leeren
+    playerHandElement.textContent = '';
+    systemHandElement.textContent = '';
+    resultElement.textContent = '';
+
+    nameInput.value = ''; // Namensfeld leeren
+
+    gamePage.hidden = true;
+    startPage.hidden = false;
+    renderRanking(); // Rangliste mit den neuen Siegen anzeigen
 });
