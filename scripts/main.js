@@ -52,3 +52,30 @@ startForm.addEventListener('submit', (event) => {
     startPage.hidden = true;
     gamePage.hidden = false;
 });
+
+// Ergebnis (gameEval) in Text umwandeln
+const resultTexts = {
+    1: 'Du',
+    0: 'Unentschieden',
+    '-1': 'Computer',
+};
+
+// Spielzug
+handButtons.forEach((button) => {
+    button.addEventListener('click', async () => {
+        const hand = button.dataset.hand;
+
+        const { gameEval, playerHand, systemHand } = await gameService.evaluate(playerName, hand);
+
+        // Ergebnis anzeigen
+        playerHandElement.textContent = playerHand;
+        systemHandElement.textContent = systemHand;
+        resultElement.textContent = resultTexts[gameEval];
+
+        // History-Eintrag (neuster Eintrag zuoberst)
+        const row = historyElement.insertRow(0);
+        row.insertCell().textContent = resultTexts[gameEval];
+        row.insertCell().textContent = playerHand;
+        row.insertCell().textContent = systemHand;
+    });
+});
