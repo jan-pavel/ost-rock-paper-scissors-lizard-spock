@@ -1,12 +1,17 @@
 import { gameService } from './model/game-service.js';
 
-// Dummy Code
-console.log('isOnline:', gameService.isOnline);
+// Startseite
+const startPage = document.querySelector('#start-page');
+const rankingElement = document.querySelector('#ranking');
+const startForm = document.querySelector('#start-form');
+const nameInput = document.querySelector('#name');
 
-const rankings = await gameService.getRankings();
-
-Object.values(rankings).forEach(x=> {
-    console.log(JSON.stringify(x));
-});
-
-console.log((await gameService.evaluate('Michael', gameService.possibleHands[0])).gameEval);
+// Spielseite
+const gamePage = document.querySelector('#game-page');
+const playerNameElement = document.querySelector('#player-name');
+const handButtons = document.querySelectorAll('[data-hand]');
+const playerHandElement = document.querySelector('#player-hand');
+const systemHandElement = document.querySelector('#system-hand');
+const resultElement = document.querySelector('#result');
+const historyElement = document.querySelector('#history');
+const backButton = document.querySelector('#back-button');
