@@ -1,13 +1,59 @@
 <!DOCTYPE html>
 <html lang="de">
+
 <head>
   <meta charset="UTF-8">
   <title>Schere Stein Papier</title>
   <link rel="stylesheet" href="styles/global.css">
   <script src="scripts/main.js" type="module"></script>
 </head>
-<body>
-<h1>Schere Stein Papier</h1>
 
+<body>
+  <h1>Schere Stein Papier</h1>
+  <section id="start-page">
+    <button type="button" id="mode-button">Wechsle zu Server</button>
+    <h2 id="ranking-title">Lokale Rangliste</h2>
+    <div id="ranking"></div>
+    <hr />
+    <form id="start-form">
+      <p>Starten Sie ein neues Spiel</p>
+      <label for="name">Name:</label>
+      <input type="text" id="name" name="name" maxlength="20" required />
+      <button type="submit">Spiel starten</button>
+    </form>
+  </section>
+
+  <section id="game-page" hidden>
+    <p><strong id="player-name"></strong>! Wähle deine Hand!</p>
+
+    <div class="hand-buttons">
+      <button type="button" class="hand-button" data-hand="Rock">Rock</button>
+      <button type="button" class="hand-button" data-hand="Paper">Paper</button>
+      <button type="button" class="hand-button" data-hand="Scissors">Scissors</button>
+      <button type="button" class="hand-button" data-hand="Lizard">Lizard</button>
+      <button type="button" class="hand-button" data-hand="Spock">Spock</button>
+    </div>
+
+    <p id="countdown"></p>
+    <p id="system-hand"></p>
+    <p id="game-error" class="error"></p>
+
+    <button type="button" id="back-button">Zurück zum Ranking</button>
+
+    <hr />
+
+    <table id="history-table">
+      <caption>History</caption>
+      <thead>
+        <tr>
+          <th>Resultat</th>
+          <th>Spieler</th>
+          <th>Gegner</th>
+        </tr>
+      </thead>
+      <tbody id="history"></tbody>
+    </table>
+  </section>
 </body>
+
 </html>

@@ -27,39 +27,70 @@ export class OfflineGameService {
     };
 
     // Can be used to check if the selected hand wins/loses
-    // TODO : complete structure
     #resultLookup = {
-        scissors: {
-            scissors: 0,
-            rock: 1,
-            paper: -1,
+        Scissors: {
+            Scissors: 0,
+            Rock: -1,
+            Paper: 1,
+            Lizard: 1,
+            Spock: -1,
         },
-        rock: {
-            scissors: 0,
-            rock: 0,
-            paper: 0,
+        Rock: {
+            Scissors: 1,
+            Rock: 0,
+            Paper: -1,
+            Lizard: 1,
+            Spock: -1,
         },
-        paper: {
-            scissors: 0,
-            rock: 0,
-            paper: 0,
+        Paper: {
+            Scissors: -1,
+            Rock: 1,
+            Paper: 0,
+            Lizard: -1,
+            Spock: 1,
+        },
+        Lizard: {
+            Scissors: -1,
+            Rock: -1,
+            Paper: 1,
+            Lizard: 0,
+            Spock: 1,
+        },
+        Spock: {
+            Scissors: 1,
+            Rock: 1,
+            Paper: -1,
+            Lizard: -1,
+            Spock: 0,
         },
     };
 
-    async getRankings() { 
-        // TODO create ranking from playerState for Example: [{rank: 1, wins: 10, players: ["Michael", "Lias"]}, {rank: 2, wins: 5, players: ["Max"]}]
-        return Promise.resolve(this.#playerState);
+    async getRankings() {
+        return Utils.createRanking(this.#playerState);
     }
 
-    // TODO
     async evaluate(playerName, playerHand) {
-        const systemHand = this.possibleHands[0];
-        const gameEval = 0;
+        // computer picks a random hand
+        const randomIndex = Math.floor(Math.random() * this.possibleHands.length);
+        const systemHand = this.possibleHands[randomIndex];
 
-        console.log(playerName, playerHand, systemHand, gameEval);
+        // 1 = player wins, 0 = draw, -1 = player loses
+        const gameEval = this.#resultLookup[playerHand][systemHand];
+
+        // create player on first game
+        if (!this.#playerState[playerName]) {
+            this.#playerState[playerName] = { user: playerName, win: 0, lost: 0 };
+        }
+
+        // update statistics (draws are not counted)
+        if (gameEval === 1) {
+            this.#playerState[playerName].win++;
+        } else if (gameEval === -1) {
+            this.#playerState[playerName].lost++;
+        }
 
         await Utils.wait(OfflineGameService.DELAY_MS); // emulate async
 
-        return {gameEval, playerHand, systemHand};
+        return { gameEval, playerHand, systemHand };
     }
 }
