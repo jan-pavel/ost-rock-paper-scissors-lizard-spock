@@ -11,7 +11,8 @@
 <body>
   <h1>Schere Stein Papier</h1>
   <section id="start-page">
-    <h2>Lokale Rangliste</h2>
+    <button type="button" id="mode-button">Wechsle zu Server</button>
+    <h2 id="ranking-title">Lokale Rangliste</h2>
     <div id="ranking"></div>
     <hr />
     <form id="start-form">
@@ -33,6 +34,7 @@
     <p>Wahl des Computers: <span id="system-hand"></span></p>
     <p>Gewonnen hat: <span id="result"></span></p>
     <p id="countdown"></p>
+    <p id="game-error" class="error"></p>
 
     <button id="back-button">Zurück zur Startseite</button>
 
