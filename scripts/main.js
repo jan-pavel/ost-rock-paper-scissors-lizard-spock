@@ -31,7 +31,8 @@ async function renderRanking() {
     rankings.slice(0, 10).forEach((entry) => {
         const rankTitle = document.createElement('p');
         rankTitle.className = 'rank-title';
-        rankTitle.textContent = `${entry.rank}. Rang mit ${entry.wins} Siegen`;
+        const winsText = entry.wins === 1 ? 'Sieg' : 'Siegen';
+        rankTitle.textContent = `${entry.rank}. Rang mit ${entry.wins} ${winsText}`;
 
         const rankPlayers = document.createElement('p');
         rankPlayers.textContent = entry.players.join(', ');
