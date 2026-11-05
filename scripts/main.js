@@ -1,4 +1,7 @@
 import { gameService } from './model/game-service.js';
+import { Utils } from './utils/utils.js';
+
+const WAIT_SECONDS = 3; // Wartezeit nach jedem Spiel
 
 let playerName = ''; // Name des aktuellen Spielers
 
@@ -15,6 +18,7 @@ const handButtons = document.querySelectorAll('[data-hand]');
 const playerHandElement = document.querySelector('#player-hand');
 const systemHandElement = document.querySelector('#system-hand');
 const resultElement = document.querySelector('#result');
+const countdownElement = document.querySelector('#countdown');
 const historyElement = document.querySelector('#history');
 const backButton = document.querySelector('#back-button');
 
@@ -60,9 +64,27 @@ const resultTexts = {
     '-1': 'Computer',
 };
 
+// Alle Hand-Buttons sperren bzw. freigeben
+function setHandButtonsDisabled(disabled) {
+    handButtons.forEach((button) => {
+        button.disabled = disabled;
+    });
+}
+
+// Wartezeit mit Countdown
+async function waitWithCountdown() {
+    for (let seconds = WAIT_SECONDS; seconds > 0; seconds--) {
+        countdownElement.textContent = `Nächste Runde in ${seconds}`;
+        await Utils.wait(1000);
+    }
+    countdownElement.textContent = '';
+}
+
 // Spielzug
 handButtons.forEach((button) => {
     button.addEventListener('click', async () => {
+        setHandButtonsDisabled(true); // keine Eingaben während Auswertung und Wartezeit
+
         const hand = button.dataset.hand;
 
         const { gameEval, playerHand, systemHand } = await gameService.evaluate(playerName, hand);
@@ -77,5 +99,8 @@ handButtons.forEach((button) => {
         row.insertCell().textContent = resultTexts[gameEval];
         row.insertCell().textContent = playerHand;
         row.insertCell().textContent = systemHand;
+
+        await waitWithCountdown(); // Ergebnis bleibt währenddessen sichtbar
+        setHandButtonsDisabled(false);
     });
 });
